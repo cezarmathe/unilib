@@ -21,7 +21,8 @@
  * SOFTWARE.
  */
 
-#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 #ifndef UNILIB_QUEUE_H
 #define UNILIB_QUEUE_H

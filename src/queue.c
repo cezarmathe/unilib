@@ -21,6 +21,7 @@
  * SOFTWARE.
  */
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -46,11 +47,11 @@ void * queue_push_front(queue_ptr queue, void * elem) {
     // if the queue is full, allocate for one more element
     if (queue->len == queue->capacity) {
         queue->capacity += 1;
-        void ** elems_new = realloc(queue->elements, queue->capacity);
-        if (elems_new == NULL) {
+        void ** elements_new = realloc(queue->elements, queue->capacity);
+        if (elements_new == NULL) {
             return elem;
         }
-        queue->elements = elems_new;
+        queue->elements = elements_new;
     }
     memmove(queue->elements + 1, queue->elements, queue->len);
     queue->elements[0] = elem;
@@ -78,12 +79,12 @@ void * queue_back(queue_ptr queue) {
 void * queue_push_back(queue_ptr queue, void * elem) {
     // if the queue is full, allocate for one more element
     if (queue->len == queue->capacity) {
-        void ** elems_new = realloc(queue->elements, queue->capacity + 1);
-        if (elems_new == NULL) {
+        void ** elements_new = realloc(queue->elements, queue->capacity + 1);
+        if (elements_new == NULL) {
             return elem;
         }
         queue->capacity += 1;
-        queue->elements = elems_new;
+        queue->elements = elements_new;
     }
     queue->elements[queue->len] = elem;
     queue->len += 1;

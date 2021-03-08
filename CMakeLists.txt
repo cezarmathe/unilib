@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.19)
 
 project(
     unilib
@@ -12,11 +12,12 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(UNILIB_INCLUDE_DIR "include/unilib")
 set(UNILIB_SRC_DIR "src")
 
-set(UNILIB_SRC "${UNILIB_SRC_DIR}/queue.c" "${UNILIB_SRC_DIR}/string.c")
+set(UNILIB_HEADERS "${UNILIB_INCLUDE_DIR}/queue.h" "${UNILIB_INCLUDE_DIR}/queue_iter.h" "${UNILIB_INCLUDE_DIR}/strings.h")
+set(UNILIB_SRC "${UNILIB_SRC_DIR}/queue.c" "${UNILIB_SRC_DIR}/queue_iter.c" "${UNILIB_SRC_DIR}/strings.c")
 
-add_library(unilib STATIC ${UNILIB_SRC})
+add_library(unilib STATIC ${UNILIB_HEADERS} ${UNILIB_SRC})
 
-target_include_directories(unilib PUBLIC include/unilib)
+target_include_directories(unilib PUBLIC "${UNILIB_INCLUDE_DIR}")
 
 enable_testing()
 add_subdirectory(tests)

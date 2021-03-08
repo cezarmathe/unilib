@@ -28,7 +28,13 @@
 #define UNILIB_QUEUE_H
 
 /**
- * A generic queue.
+ * @brief Default queue capacity.
+ */
+#define UNILIB_QUEUE_DEFAULT_CAPACITY 1
+
+/**
+ * @struct queue
+ * @brief A generic queue.
  */
 typedef struct queue_t {
     // inner list of elements
@@ -37,114 +43,135 @@ typedef struct queue_t {
     size_t len;
     // the capacity of the queue (NOT THE SAME AS LENGTH!)
     size_t capacity;
-    // the size of each element
+    // the size of an element
     size_t element_size;
 } queue_t;
 
 /**
- * Pointer to a generic queue.
+ * @brief Pointer to a generic queue.
  */
 typedef queue_t * queue_ptr;
 
 /**
- * Create a new queue.
+ * @brief Create a new queue.
  *
- * The queue is created with a capacity of 1.
+ * @details The queue is created with a capacity of 1.
  */
-queue_t queue_new();
+queue_t queue_new(size_t element_size);
 
 /**
- * Create a new queue with a certain capacity.
+ * @brief Create a new queue.
+ *
+ * @details Allocated on the heap. The queue is created with a capacity of 1.
  */
-queue_t queue_with_capacity(size_t capacity);
+queue_ptr queue_new_ptr(size_t element_size);
+
+/**
+ * @brief Create a new queue with a certain capacity.
+ */
+queue_t queue_new_with_capacity(size_t capacity, size_t element_size);
+
+/**
+ * Create a new queue with a certain capacity, allocated on the heap.
+ */
+queue_ptr queue_new_ptr_with_capacity(size_t capacity, size_t element_size);
 
 /**
  * Get the first element in the queue.
  *
- * @param queue the queue
+ * @param queue pointer to the queue
  *
- * @return the element, or NULL if there are none.
+ * @return pointer to the first element or NULL if there are none.
  */
 void * queue_front(queue_ptr queue);
 
 /**
- * Push an item at the front of the queue.
+ * @brief Push an item at the front of the queue.
  *
- * Each element MUST be dynamically allocated.
+ * @details The element must be allocated on the heap.
  *
- * Returns the element if no memory could be allocated for it.
+ * @param elem the element to be added to the queue.
+ *
+ * @return NULL if successful or the pointer to the element if unsuccessful.
  */
 void * queue_push_front(queue_ptr queue, void * elem);
 
 /**
- * Pop an item from the front of the queue.
+ * @brief Push an item at the front of the queue.
  *
- * This function does not decrease the capacity of the queue.
+ * @details The element will be copied to a new memory location.
+ *          This is suitable if you are pushing an element residing on the stack.
  *
- * Returns the element, or NULL if there are no elements.
+ * @param elem the element to be added to the queue.
+ *
+ * @return NULL if successful or the pointer to the element if unsuccessful.
+ */
+void * queue_push_front_copy(queue_ptr queue, void * elem);
+
+/**
+ * @brief Pop an item from the front of the queue.
+ *
+ * @details This function does not decrease the capacity of the queue.
+ *          The item must be de-allocated.
+ *
+ * @return the element, or NULL if there are no elements.
  */
 void * queue_pop_front(queue_ptr queue);
 
 /**
  * Get the last element in the queue.
  *
- * Returns the element, or NULL if there are none.
+ * @param queue pointer to the queue
+ *
+ * @return pointer to the last element or NULL if there are none.
  */
 void * queue_back(queue_ptr queue);
 
 /**
- * Push an item at the back of the queue.
+ * @brief Push an item at the back of the queue.
  *
- * Each element MUST be dynamically allocated.
+ * @details The element must be allocated on the heap.
  *
- * Returns the element if no memory could be allocated for it.
+ * @param elem the element to be added to the queue.
+ *
+ * @return NULL if successful or the pointer to the element if unsuccessful.
  */
 void * queue_push_back(queue_ptr queue, void * elem);
 
 /**
- * Pop an item from the back of the queue.
+ * @brief Push an item at the back of the queue.
  *
- * This function does not decrease the capacity of the queue.
+ * @details The element will be copied to a new memory location.
+ *          This is suitable if you are pushing an element residing on the stack.
  *
- * Returns the element, or NULL if there are no elements.
+ * @param elem the element to be added to the queue.
+ *
+ * @return NULL if successful or the pointer to the element if unsuccessful.
+ */
+void * queue_push_back_copy(queue_ptr queue, void * elem);
+
+/**
+ * @brief Pop an item from the back of the queue.
+ *
+ * @details This function does not decrease the capacity of the queue.
+ *          The item must be de-allocated.
+ *
+ * @return the element, or NULL if there are no elements.
  */
 void * queue_pop_back(queue_ptr queue);
 
 /**
- * Release the internal memory of the queue.
+ * @brief Empty a queue.
+ *
+ * @param queue the queue
+ */
+void queue_empty(queue_ptr queue);
+
+/**
+ * @brief Release the memory used by the queue.
+ *
+ * @details If the queue was allocated on the heap, it must be de-allocated manually.
  */
 void queue_free(queue_ptr queue);
-
-/**
- * An iterator over a queue.
- */
-typedef struct queue_iter_t {
-    queue_ptr queue;
-    size_t index;
-} queue_iter_t;
-
-/**
- * Pointer to a queue iterator.
- */
-typedef queue_iter_t * queue_iter_ptr;
-
-/**
- * Checks whether the iterator has another value.
- *
- * Returns true if there are more elements, or false otherwise.
- */
-uint8_t queue_iter_has_next(queue_iter_ptr iter);
-
-/**
- * Returns the next element in the queue.
- *
- * Returns NULL if there are no elements left.
- */
-void * queue_iter_next(queue_iter_ptr iter);
-
-/**
- * Get an iterator over a queue.
- */
-queue_iter_t queue_iter(queue_ptr queue);
 
 #endif //UNILIB_QUEUE_H

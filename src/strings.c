@@ -21,14 +21,4 @@
  * SOFTWARE.
  */
 
-#ifndef UNILIB_STRING_H
-#define UNILIB_STRING_H
-
-/**
- * A string type.
- */
-typedef struct string_t {
-    char * inner;
-} string_t;
-
-#endif //UNILIB_STRING_H
+#include "strings.h"

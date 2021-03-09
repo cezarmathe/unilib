@@ -12,8 +12,12 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(UNILIB_INCLUDE_DIR "include/unilib")
 set(UNILIB_SRC_DIR "src")
 
-set(UNILIB_HEADERS "${UNILIB_INCLUDE_DIR}/queue.h" "${UNILIB_INCLUDE_DIR}/queue_iter.h" "${UNILIB_INCLUDE_DIR}/strings.h")
-set(UNILIB_SRC "${UNILIB_SRC_DIR}/queue.c" "${UNILIB_SRC_DIR}/queue_iter.c" "${UNILIB_SRC_DIR}/strings.c")
+set(UNILIB_HEADERS
+        "${UNILIB_INCLUDE_DIR}/queue.h"
+        "${UNILIB_INCLUDE_DIR}/strings.h")
+set(UNILIB_SRC
+        "${UNILIB_SRC_DIR}/queue.c"
+        "${UNILIB_SRC_DIR}/strings.c")
 
 add_library(unilib STATIC ${UNILIB_HEADERS} ${UNILIB_SRC})
 

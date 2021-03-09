@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-#include "queue.h"
+#include "dequeue.h"
 
 #include <assert.h>
 #include <string.h>
@@ -34,48 +34,48 @@ size_t sizes[SIZES_LEN] = {
         sizeof(char),
         sizeof(char *)};
 
-void test_queue_new(queue_ptr queue, size_t capacity, size_t element_size) {
-    assert(queue->elements != NULL);
-    assert(*queue->elements == NULL);
-    assert(queue->capacity == capacity);
-    assert(queue->len == 0);
-    assert(queue->element_size == element_size);
+void test_dequeue_new(dequeue_ptr dequeue, size_t capacity, size_t element_size) {
+    assert(dequeue->elements != NULL);
+    assert(*dequeue->elements == NULL);
+    assert(dequeue->capacity == capacity);
+    assert(dequeue->len == 0);
+    assert(dequeue->element_size == element_size);
 }
 
 int main() {
     for (int i = 0; i < SIZES_LEN; i++) {
-        queue_t queue = queue_new(sizes[i]);
-        test_queue_new(&queue, UNILIB_QUEUE_DEFAULT_CAPACITY, sizes[i]);
-        queue_free(&queue);
+        dequeue_t dequeue = dequeue_new(sizes[i]);
+        test_dequeue_new(&dequeue, DEQUEUE_DEFAULT_CAPACITY, sizes[i]);
+        dequeue_free(&dequeue);
     }
     for (int i = 0; i < SIZES_LEN; i++) {
-        queue_ptr queue = queue_new_ptr(sizes[i]);
-        test_queue_new(queue, UNILIB_QUEUE_DEFAULT_CAPACITY, sizes[i]);
-        queue_free(queue);
-        free(queue);
-    }
-    for (int i = 0; i < SIZES_LEN; i++) {
-        size_t capacity = 1024;
-        queue_t queue = queue_new_with_capacity(capacity, sizes[i]);
-        test_queue_new(&queue, capacity, sizes[i]);
-        queue_free(&queue);
+        dequeue_ptr dequeue = dequeue_new_ptr(sizes[i]);
+        test_dequeue_new(dequeue, DEQUEUE_DEFAULT_CAPACITY, sizes[i]);
+        dequeue_free(dequeue);
+        free(dequeue);
     }
     for (int i = 0; i < SIZES_LEN; i++) {
         size_t capacity = 1024;
-        queue_ptr queue = queue_new_ptr_with_capacity(capacity, sizes[i]);
-        test_queue_new(queue, capacity, sizes[i]);
-        queue_free(queue);
-        free(queue);
+        dequeue_t dequeue = dequeue_new_with_capacity(capacity, sizes[i]);
+        test_dequeue_new(&dequeue, capacity, sizes[i]);
+        dequeue_free(&dequeue);
+    }
+    for (int i = 0; i < SIZES_LEN; i++) {
+        size_t capacity = 1024;
+        dequeue_ptr dequeue = dequeue_new_ptr_with_capacity(capacity, sizes[i]);
+        test_dequeue_new(dequeue, capacity, sizes[i]);
+        dequeue_free(dequeue);
+        free(dequeue);
     }
 
-    queue_t queue = queue_new(sizeof(int));
+    dequeue_t dequeue = dequeue_new(sizeof(int));
     for (int i = 0; i < 1024; i++) {
-        assert(queue_push_back_copy(&queue, &i) == NULL);
+        assert(dequeue_push_back_copy(&dequeue, &i) == NULL);
     }
-    assert(queue.len == 1024);
-    assert(*((int *) queue_front(&queue)) == 0);
-    assert(*((int *) queue_back(&queue)) == 1023);
-    queue_empty(&queue);
-    assert(queue.len == 0);
-    queue_free(&queue);
+    assert(dequeue.len == 1024);
+    assert(*((int *) dequeue_front(&dequeue)) == 0);
+    assert(*((int *) dequeue_back(&dequeue)) == 1023);
+    dequeue_empty(&dequeue);
+    assert(dequeue.len == 0);
+    dequeue_free(&dequeue);
 }

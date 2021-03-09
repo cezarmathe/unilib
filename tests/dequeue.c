@@ -44,33 +44,38 @@ void test_dequeue_new(dequeue_ptr dequeue, size_t capacity, size_t element_size)
 
 int main() {
     for (int i = 0; i < SIZES_LEN; i++) {
-        dequeue_t dequeue = dequeue_new(sizes[i]);
+        dequeue_t dequeue;
+        assert(DEQUEUE_ERROR_IS_OK(dequeue_new(&dequeue, sizes[i])));
         test_dequeue_new(&dequeue, DEQUEUE_DEFAULT_CAPACITY, sizes[i]);
         dequeue_free(&dequeue);
     }
     for (int i = 0; i < SIZES_LEN; i++) {
-        dequeue_ptr dequeue = dequeue_new_ptr(sizes[i]);
+        dequeue_ptr dequeue;
+        assert(DEQUEUE_ERROR_IS_OK(dequeue_new_ptr(&dequeue, sizes[i])));
         test_dequeue_new(dequeue, DEQUEUE_DEFAULT_CAPACITY, sizes[i]);
         dequeue_free(dequeue);
         free(dequeue);
     }
     for (int i = 0; i < SIZES_LEN; i++) {
         size_t capacity = 1024;
-        dequeue_t dequeue = dequeue_new_with_capacity(capacity, sizes[i]);
+        dequeue_t dequeue;
+        assert(DEQUEUE_ERROR_IS_OK(dequeue_new_with_capacity(&dequeue, capacity, sizes[i])));
         test_dequeue_new(&dequeue, capacity, sizes[i]);
-        dequeue_free(&dequeue);
+        assert(DEQUEUE_ERROR_IS_OK(dequeue_free(&dequeue)));
     }
     for (int i = 0; i < SIZES_LEN; i++) {
         size_t capacity = 1024;
-        dequeue_ptr dequeue = dequeue_new_ptr_with_capacity(capacity, sizes[i]);
+        dequeue_ptr dequeue;
+        assert(DEQUEUE_ERROR_IS_OK(dequeue_new_ptr_with_capacity(&dequeue, capacity, sizes[i])));
         test_dequeue_new(dequeue, capacity, sizes[i]);
         dequeue_free(dequeue);
         free(dequeue);
     }
 
-    dequeue_t dequeue = dequeue_new(sizeof(int));
+    dequeue_t dequeue;
+    assert(DEQUEUE_ERROR_IS_OK(dequeue_new(&dequeue, sizeof(int))));
     for (int i = 0; i < 1024; i++) {
-        assert(dequeue_push_back_copy(&dequeue, &i) == NULL);
+        assert(DEQUEUE_ERROR_IS_OK(dequeue_push_back_copy(&dequeue, &i)));
     }
     assert(dequeue.len == 1024);
     assert(*((int *) dequeue_front(&dequeue)) == 0);

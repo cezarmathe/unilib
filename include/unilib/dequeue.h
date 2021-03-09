@@ -83,7 +83,7 @@ typedef dequeue_t * dequeue_ptr;
  * @brief Create a new dequeue.
  * @details This calls dequeue_new_with_capacity with the default capacity.
  * @see dequeue_new_with_capacity
- * @see UNILIB_DEQUEUE_DEFAULT_CAPACITY
+ * @see DEQUEUE_DEFAULT_CAPACITY
  *
  * @param dequeue address to the dequeue that should be created
  * @param element_size the size of an element in the dequeue

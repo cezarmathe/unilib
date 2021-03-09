@@ -78,9 +78,14 @@ int main() {
         assert(DEQUEUE_ERROR_IS_OK(dequeue_push_back_copy(&dequeue, &i)));
     }
     assert(dequeue.len == 1024);
+    assert(dequeue.capacity == 1024);
     assert(*((int *) dequeue_front(&dequeue)) == 0);
     assert(*((int *) dequeue_back(&dequeue)) == 1023);
+    assert(DEQUEUE_ERROR_IS_OK(dequeue_resize(&dequeue, 512)));
+    assert(dequeue.len == 512);
+    assert(dequeue.capacity == 512);
     dequeue_empty(&dequeue);
     assert(dequeue.len == 0);
+    assert(dequeue.capacity == 512);
     dequeue_free(&dequeue);
 }

@@ -74,18 +74,22 @@ dequeue_error_t dequeue_new_ptr_with_capacity(dequeue_ptr * dequeue, size_t capa
         *dequeue = NULL;
         return DEQUEUE_ERROR_ALLOC_FAILED;
     }
-    uint8_t result = dequeue_init(new_dequeue, capacity, element_size);
+    dequeue_error_t result = dequeue_init(new_dequeue, capacity, element_size);
     switch(result) {
         case DEQUEUE_ERROR_OK:
             *dequeue = new_dequeue;
+            break;
         case DEQUEUE_ERROR_NULL_POINTER_RECEIVED:
             *dequeue = NULL;
+            break;
         case DEQUEUE_ERROR_ALLOC_FAILED:
-            *dequeue = NULL;
             free(new_dequeue);
+            *dequeue = NULL;
+            break;
         default:
             // this should not happen
             *dequeue = NULL;
+            break;
     }
     return result;
 }

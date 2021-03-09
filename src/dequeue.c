@@ -236,14 +236,14 @@ dequeue_error_t dequeue_resize(dequeue_ptr dequeue, size_t capacity) {
     // if the future capacity is less than the current length of the dequeue, add items that shall be
     // removed in the intermediate buffer
     if (capacity < dequeue->len) {
-        buf_len = dequeue->len - dequeue->capacity;
+        buf_len = dequeue->len - capacity;
         buf = malloc(buf_len * sizeof(void *));
         if (buf == NULL) {
             return DEQUEUE_ERROR_ALLOC_FAILED;
         }
         void ** surplus_start = dequeue->elements + (capacity - 1) * sizeof(void *);
-        memcpy(buf, surplus_start, buf_len);
-        buf_len *= -1;
+        memcpy(buf, surplus_start, buf_len * sizeof(void *));
+        buf_len *= (-1);
     } else if (capacity > dequeue->capacity) {
         buf_len = capacity - dequeue->capacity;
         buf = malloc(buf_len * sizeof(void *));
@@ -264,7 +264,8 @@ dequeue_error_t dequeue_resize(dequeue_ptr dequeue, size_t capacity) {
     dequeue->capacity = capacity;
 
     if (buf_len < 0) {
-        buf_len *= -1;
+        dequeue->len = capacity;
+        buf_len *= (-1);
         for (size_t i = 0; i < buf_len; i++) {
             free(buf[i]);
         }

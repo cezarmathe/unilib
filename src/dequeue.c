@@ -9,8 +9,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -35,11 +35,13 @@
  * @param capacity the capacity of the dequeue
  * @param element_size the size of each element in the dequeue
  *
- * @return DEQUEUE_ERROR_OK if successful
- *         DEQUEUE_ERROR_NULL_POINTER_RECEIVED if the dequeue pointer is NULL
+ * @return DEQUEUE_ERROR_OK if successful,
+ *         DEQUEUE_ERROR_NULL_POINTER_RECEIVED if the dequeue pointer is NULL,
  *         DEQUEUE_ERROR_ALLOC_FAILED if allocating the elements array failed
  */
-static dequeue_error_t dequeue_init(dequeue_ptr dequeue, size_t capacity, size_t element_size) {
+static dequeue_error_t dequeue_init(dequeue_ptr dequeue,
+                                    size_t capacity,
+                                    size_t element_size) {
     dequeue->elements = calloc(capacity, sizeof(void *));
     if (dequeue->elements == NULL) {
         return DEQUEUE_ERROR_ALLOC_FAILED;
@@ -51,21 +53,29 @@ static dequeue_error_t dequeue_init(dequeue_ptr dequeue, size_t capacity, size_t
 }
 
 dequeue_error_t dequeue_new(dequeue_ptr dequeue, size_t element_size) {
-    return dequeue_new_with_capacity(dequeue, DEQUEUE_DEFAULT_CAPACITY, element_size);
+    return dequeue_new_with_capacity(dequeue,
+                                     DEQUEUE_DEFAULT_CAPACITY,
+                                     element_size);
 }
 
 dequeue_error_t dequeue_new_ptr(dequeue_ptr * dequeue, size_t element_size) {
-    return dequeue_new_ptr_with_capacity(dequeue, DEQUEUE_DEFAULT_CAPACITY, element_size);
+    return dequeue_new_ptr_with_capacity(dequeue,
+                                         DEQUEUE_DEFAULT_CAPACITY,
+                                         element_size);
 }
 
-dequeue_error_t dequeue_new_with_capacity(dequeue_ptr dequeue, size_t capacity, size_t element_size) {
+dequeue_error_t dequeue_new_with_capacity(dequeue_ptr dequeue,
+                                          size_t capacity,
+                                          size_t element_size) {
     if (dequeue == NULL) {
         return DEQUEUE_ERROR_NULL_POINTER_RECEIVED;
     }
     return dequeue_init(dequeue, capacity, element_size);
 }
 
-dequeue_error_t dequeue_new_ptr_with_capacity(dequeue_ptr * dequeue, size_t capacity, size_t element_size) {
+dequeue_error_t dequeue_new_ptr_with_capacity(dequeue_ptr * dequeue,
+                                              size_t capacity,
+                                              size_t element_size) {
     if (dequeue == NULL) {
         return DEQUEUE_ERROR_NULL_POINTER_RECEIVED;
     }
@@ -115,7 +125,9 @@ dequeue_error_t dequeue_push_front(dequeue_ptr dequeue, void * elem) {
             return err;
         }
     }
-    memmove(dequeue->elements + sizeof(void *), dequeue->elements, dequeue->len);
+    memmove(dequeue->elements + sizeof(void *),
+            dequeue->elements,
+            dequeue->len);
     dequeue->elements[0] = elem;
     dequeue->len += 1;
     return DEQUEUE_ERROR_OK;
@@ -150,7 +162,9 @@ void * dequeue_pop_front(dequeue_ptr dequeue) {
     }
     void * elem = dequeue->elements[0];
     if (dequeue->len > 1) {
-        memmove(dequeue->elements, dequeue->elements + sizeof(void *), dequeue->len - 1);
+        memmove(dequeue->elements,
+                dequeue->elements + sizeof(void *),
+                dequeue->len - 1);
     }
     dequeue->elements[dequeue->len - 1] = NULL;
     dequeue->len -= 1;
@@ -233,15 +247,16 @@ dequeue_error_t dequeue_resize(dequeue_ptr dequeue, size_t capacity) {
     // otherwise, the items must be added at the end of the future dequeue
     ssize_t buf_len = 0;
 
-    // if the future capacity is less than the current length of the dequeue, add items that shall be
-    // removed in the intermediate buffer
+    // if the future capacity is less than the current length of the dequeue,
+    // add items that shall be removed in the intermediate buffer
     if (capacity < dequeue->len) {
         buf_len = dequeue->len - capacity;
         buf = malloc(buf_len * sizeof(void *));
         if (buf == NULL) {
             return DEQUEUE_ERROR_ALLOC_FAILED;
         }
-        void ** surplus_start = dequeue->elements + (capacity - 1) * sizeof(void *);
+        void ** surplus_start = dequeue->elements
+                + (capacity - 1) * sizeof(void *);
         memcpy(buf, surplus_start, buf_len * sizeof(void *));
         buf_len *= (-1);
     } else if (capacity > dequeue->capacity) {
@@ -253,7 +268,8 @@ dequeue_error_t dequeue_resize(dequeue_ptr dequeue, size_t capacity) {
         memset(buf, 0, buf_len * sizeof(void *));
     }
 
-    void ** elements_new = realloc(dequeue->elements, capacity * sizeof(void *));
+    void ** elements_new = realloc(dequeue->elements,
+                                   capacity * sizeof(void *));
     if (elements_new == NULL) {
         if (buf != NULL) {
             free(buf);

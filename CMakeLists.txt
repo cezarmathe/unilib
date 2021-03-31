@@ -12,9 +12,11 @@ set(UNILIB_INCLUDE_DIR "include/unilib")
 set(UNILIB_SRC_DIR "src")
 
 set(UNILIB_HEADERS
-        "${UNILIB_INCLUDE_DIR}/dequeue.h")
+        "${UNILIB_INCLUDE_DIR}/dequeue.h"
+        "${UNILIB_INCLUDE_DIR}/iter.h")
 set(UNILIB_SRC
-        "${UNILIB_SRC_DIR}/dequeue.c")
+        "${UNILIB_SRC_DIR}/dequeue.c"
+        "${UNILIB_SRC_DIR}/iter.c")
 
 add_library(unilib STATIC ${UNILIB_HEADERS} ${UNILIB_SRC})
 
